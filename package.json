@@ -15,9 +15,11 @@
 		"smui-theme-light": "smui-theme compile static/smui.css -i src/theme",
 		"smui-theme-dark": "smui-theme compile static/smui-dark.css -i src/theme/dark"
 	},
-	"dependencies": {
-		"partysocket": "0.0.15"
-	},
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "openai": "^4.19.0",
+    "partysocket": "0.0.15"
+  },
 	"devDependencies": {
 		"@fontsource/fira-mono": "^4.5.10",
 		"@neoconfetti/svelte": "^1.0.0",
