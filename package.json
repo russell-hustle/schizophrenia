@@ -3,14 +3,17 @@
 	"version": "0.0.1",
 	"scripts": {
 		"dev:client": "vite dev",
-		"dev:server": "partkykit dev",
-    "deploy": "partykit deploy",
+		"dev:server": "partykit dev",
+		"deploy": "partykit deploy",
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"prepare": "npm run smui-theme-light && npm run smui-theme-dark",
+		"smui-theme-light": "smui-theme compile static/smui.css -i src/theme",
+		"smui-theme-dark": "smui-theme compile static/smui-dark.css -i src/theme/dark"
 	},
 	"dependencies": {
 		"partysocket": "0.0.15"
@@ -18,6 +21,7 @@
 	"devDependencies": {
 		"@fontsource/fira-mono": "^4.5.10",
 		"@neoconfetti/svelte": "^1.0.0",
+		"@smui/button": "7.0.0-beta.15",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.27.4",
 		"@types/cookie": "^0.5.1",
@@ -26,13 +30,14 @@
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-svelte": "^2.30.0",
+		"partykit": "0.0.37",
 		"prettier": "^3.0.0",
 		"prettier-plugin-svelte": "^3.0.0",
+		"smui-theme": "7.0.0-beta.15",
 		"svelte": "^4.0.5",
 		"svelte-check": "^3.6.0",
 		"tslib": "^2.4.1",
-		"partykit": "0.0.37",
-    "typescript": "^5.2.2",
+		"typescript": "^5.2.2",
 		"vite": "^4.4.2"
 	},
 	"type": "module"
