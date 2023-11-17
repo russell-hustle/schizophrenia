@@ -1,18 +1,38 @@
 <script lang="ts">
   export let open: boolean;
-  export let handleClose: () => void;
+  export let onClose: () => void;
   export let onVoiceAdd: (voice: Voice) => void;
+
+  import { onMount, onDestroy } from 'svelte';
+
+  onMount(() => {
+    document.addEventListener("keydown", handleKeyDown);
+  });
+
+  onDestroy(() => {
+    document.removeEventListener("keydown", handleKeyDown);
+  });
 
   let name = "";
   let personality = "";
+
+  const handleClose = () => {
+    onClose();
+    name = "";
+    personality = "";
+  }
 
   const handleCreate = () => {
     onVoiceAdd({ name, personality });
 
     handleClose();
-    name = "";
-    personality = "";
   };
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      handleClose();
+    }
+  }
 </script>
 
 {#if open}

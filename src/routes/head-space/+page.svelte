@@ -13,86 +13,6 @@
   let messageText = "";
 
   let messages: Message[] = [
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
-    {
-      user: 'a',
-      text: 'b'
-    },
   ];
 
   let voices: string[] = [];
@@ -126,6 +46,10 @@
   }
 
   const handleBullshit = () => {
+    if (voices.length === 0) {
+      return;
+    }
+
     const randomVoice = voices[Math.floor(Math.random() * voices.length)];
 
     const message: Message = {
@@ -159,6 +83,12 @@
 
   <div id="space-messages">
     <ul>
+      {#if messages.length === 0}
+      <li class="message" id="placeholder">
+        <p class="message-text">
+          No messages yet
+        </p>
+      {/if}
       {#each messages as message}
       <li class="message">
         <p class="message-user"
@@ -181,7 +111,7 @@
     </div>
   </div>
 
-  <VoiceCreator open={creationOpen} handleClose={handleClose} onVoiceAdd={handleVoiceAdd} />
+  <VoiceCreator open={creationOpen} onClose={handleClose} onVoiceAdd={handleVoiceAdd} />
 
 </div>
 
@@ -217,6 +147,10 @@ button.icon {
       display: flex;
       flex-direction: column;
       gap: 8px;
+
+      #placeholder {
+        opacity: 0.5;
+      }
 
       li.message {
         display: flex;

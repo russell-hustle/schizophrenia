@@ -8,5 +8,5 @@ export const getColorName = (name: string) => {
     0,
   );
 
-  return `hsl(${stringUniqueHash % 360}, 95%, 50%)`;
+  return `hsl(${stringUniqueHash % 360}, 95%, 20%)`;
 };
