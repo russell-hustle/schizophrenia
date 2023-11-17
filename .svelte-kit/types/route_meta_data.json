@@ -5,6 +5,10 @@
 	"/about": [
 		"src/routes/about/+page.ts"
 	],
+	"/head-space": [],
+	"/polina": [
+		"src/routes/polina/+page.ts"
+	],
 	"/sverdle": [
 		"src/routes/sverdle/+page.server.ts"
 	],

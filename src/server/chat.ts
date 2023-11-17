@@ -1,10 +1,13 @@
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-  // apiKey: it goes here bro,
-});
 
-async function callOpenAI(message: string, conversationContext: string) {
+
+async function callOpenAI(key: string, message: string, conversationContext: string) {
+  const openai = new OpenAI({
+    apiKey: key,
+  });
+
+  console.log({ key });
   console.log("message", message);
   return await openai.chat.completions.create({
     messages: [{ role: "user", content: conversationContext }],

@@ -3,8 +3,6 @@ import type { Message, Voice, NewVoiceRequest, VoicesMap } from "./types";
 import { callOpenAI } from "./chat";
 import crypto from "crypto";
 
-import 'dotenv/config';
-
 export default class Server implements Party.Server {
   constructor(readonly party: Party.Party) { }
 
@@ -134,7 +132,8 @@ export default class Server implements Party.Server {
       return;
     }
     const context = await this.createContext(voice);
-    return await callOpenAI(voiceUUID, context);
+    const apiKey = this.party.env.API_KEY as string;
+    return await callOpenAI(apiKey, voiceUUID, context);
   }
 
   async createContext(voice: Voice) {
