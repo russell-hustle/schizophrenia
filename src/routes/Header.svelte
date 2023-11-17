@@ -1,6 +1,6 @@
 <script>
   import { page } from "$app/stores";
-  import logo from "$lib/images/svelte-logo.svg";
+  import logo from "$lib/images/schizo.webp";
   import github from "$lib/images/github.svg";
 
   const handleToggleTheme = () => {
@@ -19,9 +19,7 @@
 
 <header>
   <div class="toolbar">
-    <a href="https://kit.svelte.dev">
-      <img src={logo} alt="SvelteKit" />
-    </a>
+    <img id="logo" src={logo} alt="SvelteKit" />
   </div>
 
   <nav>
@@ -85,4 +83,8 @@
     gap: 8px;
   }
 
+  #logo {
+    width: 50px;
+    height: 50px;
+  }
 </style>
