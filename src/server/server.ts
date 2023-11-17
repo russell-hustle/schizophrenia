@@ -22,6 +22,7 @@ export default class Server implements Party.Server {
 
   // websocket handler
   async onMessage(message: string, sender: Party.Connection) {
+    console.log({ message });
     // broadcast it to all the other connections in the room...
     this.party.broadcast(
       `${sender.id}: ${message}`,
