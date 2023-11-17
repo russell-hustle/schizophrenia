@@ -7,8 +7,6 @@
   let personality = "";
 
   const handleCreate = () => {
-    alert(name);
-    // TODO: add voice to room
     onVoiceAdd({ name, personality });
 
     handleClose();

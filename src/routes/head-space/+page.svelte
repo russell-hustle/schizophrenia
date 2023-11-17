@@ -12,7 +12,88 @@
 
   let messageText = "";
 
-  let messages: Message[] = [];
+  let messages: Message[] = [
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+    {
+      user: 'a',
+      text: 'b'
+    },
+  ];
 
   let voices: string[] = [];
 
@@ -112,6 +193,7 @@ button.icon {
 }
 
 #space {
+  overflow: auto;
   flex: 1;
   padding: 16px;
   border: 1px solid black;
@@ -126,6 +208,7 @@ button.icon {
 
   #space-messages {
     flex: 1;
+    overflow: auto;
     padding: 16px;
     border: 1px solid black;
     border-radius: 8px;
