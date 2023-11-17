@@ -1,0 +1,9 @@
+{
+  "name": "schizophrenia",
+  "main": "src/server/server.ts",
+  "compatibilityDate": "2023-11-17",
+  "serve": {
+    "path": "public",
+    "build": "src/server/client.ts"
+  }
+}
