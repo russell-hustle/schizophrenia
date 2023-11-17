@@ -1,9 +1,9 @@
 <script>
 	import Header from './Header.svelte';
-	import './styles.css';
+	import './global.scss';
 </script>
 
-<div class="app">
+<div id="app">
 	<Header />
 
 	<main>
@@ -16,10 +16,10 @@
 </div>
 
 <style>
-	.app {
+	#app {
 		display: flex;
 		flex-direction: column;
-		min-height: 100vh;
+		height: 100vh;
 	}
 
 	main {
