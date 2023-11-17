@@ -1,0 +1,17 @@
+{
+	"/": [
+		"src/routes/+page.ts"
+	],
+	"/about": [
+		"src/routes/about/+page.ts"
+	],
+	"/polina": [
+		"src/routes/polina/+page.ts"
+	],
+	"/sverdle": [
+		"src/routes/sverdle/+page.server.ts"
+	],
+	"/sverdle/how-to-play": [
+		"src/routes/sverdle/how-to-play/+page.ts"
+	]
+}
