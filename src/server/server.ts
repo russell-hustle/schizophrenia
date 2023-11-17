@@ -1,7 +1,9 @@
 import type * as Party from "partykit/server";
 
+import 'dotenv/config';
+
 export default class Server implements Party.Server {
-  constructor(readonly party: Party.Party) {}
+  constructor(readonly party: Party.Party) { }
 
   onConnect(conn: Party.Connection, ctx: Party.ConnectionContext) {
     // A websocket just connected!
