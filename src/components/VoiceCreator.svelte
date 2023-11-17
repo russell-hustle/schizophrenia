@@ -1,6 +1,7 @@
 <script lang="ts">
   export let open: boolean;
   export let handleClose: () => void;
+  export let onVoiceAdd: (voice: Voice) => void;
 
   let name = "";
   let personality = "";
@@ -8,6 +9,11 @@
   const handleCreate = () => {
     alert(name);
     // TODO: add voice to room
+    onVoiceAdd({ name, personality });
+
+    handleClose();
+    name = "";
+    personality = "";
   };
 </script>
 
@@ -16,8 +22,8 @@
     <button on:click={handleClose}>Close</button>
     <h2>Create a voice</h2>
     <input bind:value={name} placeholder="Name" />
-    <button on:click={handleCreate}>Create</button>
     <input bind:value={personality} placeholder="Personality" />
+    <button on:click={handleCreate}>Add</button>
   </div>
 {/if}
 
