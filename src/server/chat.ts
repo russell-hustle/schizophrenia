@@ -1,16 +1,16 @@
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-  // apiKey: process.env.OPENAI_API_KEY,
-  apiKey: "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",
+  // apiKey: it goes here bro,
 });
 
-async function postMessage(content: string, previousMessages?: string[]) {
+async function callOpenAI(message: string, conversationContext: string) {
+  console.log("message", message);
   return await openai.chat.completions.create({
-    messages: [{ role: "user", content: content }],
+    messages: [{ role: "user", content: conversationContext }],
     model: "gpt-3.5-turbo",
     stream: true,
   });
 }
 
-export { postMessage };
+export { callOpenAI };

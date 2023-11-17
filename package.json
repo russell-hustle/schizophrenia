@@ -13,6 +13,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "crypto": "^1.0.1",
     "openai": "^4.19.0",
     "partysocket": "0.0.15"
   },
