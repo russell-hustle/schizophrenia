@@ -77,9 +77,6 @@
   
   const handleVoiceClear = async () => {
 
-    console.log("hello")
-
-
     const url = BASE_URL + '/party/voices';
 
     try {
