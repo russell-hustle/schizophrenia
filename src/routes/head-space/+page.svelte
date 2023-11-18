@@ -56,7 +56,7 @@
       message: message
     });
 
-    conn.send(payload);
+    // conn.send(payload);
 
     messages = [...messages, message];
     messageText = "";
