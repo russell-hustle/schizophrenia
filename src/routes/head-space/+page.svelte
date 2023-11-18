@@ -13,7 +13,7 @@
 
   import {getColorName} from '@/utils/colorName';
 
-  let spaceName = "unknown";
+  let spaceName = "";
   let creationOpen = false;
 
   let messageText = "";
@@ -38,7 +38,7 @@
 
     const message: Message = {
       text: messageText,
-      user: "User"
+      user: "User",
     };
 
     const payload = JSON.stringify({
@@ -149,7 +149,7 @@
   const scrollToBottom = () => {
     const spaceMessages = document.getElementById('space-messages');
     if (spaceMessages) {
-      scrollTop = spaceMessages.scrollHeight
+      spaceMessages.scrollTop = spaceMessages.scrollHeight;
     }
 
   }
@@ -168,12 +168,6 @@
 
   <div id="space-messages">
     <ul>
-      {#if messages.length === 0}
-      <li class="message" id="placeholder">
-        <p class="message-text">
-          No messages yet
-        </p>
-      {/if}
       {#each messages as message}
       <li class="message">
         <p class="message-user"
@@ -207,6 +201,11 @@ button.icon {
   width: 30px;
   height: 30px;
 }
+
+.sendButton {
+  padding: 10px;
+}
+
 
 #space {
   overflow: auto;
@@ -243,7 +242,7 @@ button.icon {
         gap: 8px;
         padding: 8px;
         border: 1px solid black;
-        border-radius: 18px 18px 18px 0;
+        border-radius: 14px 14px 14px 0;
 
         .message-user {
           font-weight: bold;

@@ -1,13 +1,146 @@
 import type * as Party from "partykit/server";
-import type { Message, Voice, NewVoiceRequest, VoicesMap } from "./types";
 import { callOpenAI } from "./chat";
 import crypto from "node:crypto";
 
+import openai from "openai";
+import { getIntroduction } from "@/utils/entrances";
+import { profanityPrompt, voicePrompt } from "@/server/prompts";
+
+const MESSAGE_INTERVAL = 10000;
+
+const RUN_STATUS_CHECK_INTERVAL = 1000;
+
 export default class Server implements Party.Server {
-  constructor(readonly party: Party.Party) { }
+  private thread: openai.Beta.Threads.Thread | null;
+
+  constructor(readonly party: Party.Party) {
+    this.thread = null;
+
+    console.log({ party: this.party });
+
+    this.initialize();
+  }
+
+  /**
+   * JSON.stringify and log
+   */
+  logJson(...args: any[]) {
+    console.log(JSON.stringify(args, null, 2));
+  }
+
+  get openaiKey() {
+    const apiKey = this.party.env.API_KEY as string;
+    return apiKey;
+  }
+
+  get openai() {
+    return new openai.OpenAI({
+      apiKey: this.openaiKey,
+    });
+  }
+
+  /**
+   * Async initialization.
+   */
+  async initialize() {
+    try {
+      console.info("creating thread...");
+      const ai = this.openai;
+      this.thread = await ai.beta.threads.create();
+
+      console.info("thread created", this.thread.id);
+
+      // Begin thread manager loop
+      setInterval(() => {
+        this.tick();
+      }, MESSAGE_INTERVAL);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  /**
+   * Every tick we process.
+   *
+   * TODO: handle @ messages separately
+   */
+  async tick() {
+    console.log("tick");
+
+    if (!this.thread) {
+      // Not initialized yet
+      console.warn("Can't tick, thread is not initialized!");
+      return;
+    }
+
+    // Let's choose a random voice
+    const voiceMap = await this.getVoices();
+    if (!Object.keys(voiceMap).length) {
+      return;
+    }
+
+    const voices = Object.values(voiceMap);
+
+    const voice = voices[Math.floor(Math.random() * voices.length)];
+
+    const ai = this.openai;
+    const thread = this.thread;
+
+    // Let's generate a message
+    console.info("Generating message for voice", voice.name);
+    const run = await ai.beta.threads.runs.create(
+      thread.id,
+      {
+        assistant_id: voice.assistantId,
+        instructions: "Respond to the most recent message with the context of this thread."
+      }
+    );
+
+    let runResult: openai.Beta.Threads.Runs.Run;
+
+    do {
+      // Sleep for a bit
+      await new Promise((resolve) => setTimeout(resolve, RUN_STATUS_CHECK_INTERVAL));
+
+      runResult = await ai.beta.threads.runs.retrieve(
+        thread.id,
+        run.id
+      );
+
+      // IDK maybe handle other bad status
+      console.log({ status: runResult.status });
+    } while (runResult.status !== "completed");
+
+    // Retrieve new message
+    const messages = await ai.beta.threads.messages.list(
+      thread.id
+    );
+
+    // This might be some race condition shit or something
+    const newMessage = messages.data[0];
+
+    this.logJson("new message", newMessage.content);
+
+    this.broadcastMessage({
+      message: newMessage.content.join(''),
+      voice: voice,
+    });
+  }
+
+  async broadcastMessage(payload: EventMessageVoice['payload']) {
+    const event: EventMessageVoice = {
+      type: 'MESSAGE_VOICE',
+      payload,
+    };
+
+    const body = JSON.stringify(event);
+
+    this.party.broadcast(body);
+  }
 
   // new websocket connection handler
-  onConnect(conn: Party.Connection, ctx: Party.ConnectionContext) {
+  async onConnect(conn: Party.Connection, ctx: Party.ConnectionContext) {
     // A websocket just connected!
     console.log(
       `Connected:
@@ -23,39 +156,26 @@ export default class Server implements Party.Server {
   // websocket handler
   async onMessage(message: string, sender: Party.Connection) {
     console.log({ message });
-    // broadcast it to all the other connections in the room...
-    this.party.broadcast(
-      `${sender.id}: ${message}`,
-      // ...except for the connection it came from
-      [sender.id]
-    );
 
-    // request a voice to say something, message will be in the form of "voice/UUID"
-    if (message.startsWith("voice")) {
-      // split string
-      const [_, voiceUUID] = message.split("/");
-      const stream = await this.handleRequestVoiceResponse(voiceUUID);
-      for await (const chunk of stream) {
-        sender.send(chunk.choices[0]?.delta?.content || "");
-      }
-    } else {
-      // await this.handleSendMessage(message, sender);
+
+    const event = JSON.parse(message) as SocketEvent;
+
+    console.info({ event });
+
+    switch (event.type) {
+      case "VOICE_ADD":
+        this.addVoice(event.payload.voice);
+        break;
+      case "VOICE_REMOVE":
+      case "MESSAGE_USER":
+      case "MESSAGE_VOICE":
     }
-    // const m: Message = {
-    //   VoiceUUID: sender.id,
-    //   Content: message,
-    //   Time: new Date(),
-    //   CreatedBy: sender.id,
-    // };
-    // for await (const chunk of stream) {
-    //   sender.send(chunk.choices[0]?.delta?.content || "");
-    // }
   }
 
   // http request handler
   async onRequest(request: Party.Request) {
 
-    
+
 
     const headers = new Headers({
       "Content-Type": "application/json",
@@ -71,19 +191,16 @@ export default class Server implements Party.Server {
     if (request.method === "POST") {
       // add a voice
       if (request.url.includes("/voice")) {
-        const body: NewVoiceRequest = await request.json();
+        const body: VoiceInit = await request.json();
         if (!body?.name) {
           return new Response("Missing name", { headers, status: 400 });
         }
         if (!body?.personality) {
-          return new Response("Missing description", { headers, status: 400 });
+          return new Response("Missing personality", { status: 400 });
         }
-        const newVoiceUUID = crypto.randomUUID();
-        const newVoice: Voice = {
-          UUID: newVoiceUUID,
-          Name: body.name,
-          Description: body.personality,
-          Messages: [],
+        const newVoice: VoiceInit = {
+          name: body.name,
+          personality: body.personality,
         };
         await this.addVoice(newVoice);
         const res = new Response(JSON.stringify(newVoice), { headers });
@@ -122,8 +239,8 @@ export default class Server implements Party.Server {
 
   // getters/setters for storage
   async getVoices() {
-    const voices: VoicesMap =
-      (await this.party.storage.get<VoicesMap>("voices")) || {};
+    const voices: VoiceMap =
+      (await this.party.storage.get<VoiceMap>("voices")) || {};
     return voices;
   }
 
@@ -139,11 +256,52 @@ export default class Server implements Party.Server {
     return messages;
   }
 
-  async addVoice(voice: Voice) {
-    const voices: VoicesMap =
-      (await this.party.storage.get<VoicesMap>("voices")) || {};
-    voices[voice.UUID] = voice;
-    await this.party.storage.put<VoicesMap>("voices", voices);
+  async addVoice(voiceInit: VoiceInit) {
+    console.info("Adding voice", voiceInit);
+
+    const thread = this.thread;
+
+    if (!thread) {
+      console.warn("Can't add voice, thread is not initialized!");
+      return;
+    }
+
+    const ai = this.openai;
+
+    const assistant = await ai.beta.assistants.create({
+      instructions:
+        `${voicePrompt}Your name is ${voiceInit.name}. Your personality is ${voiceInit.personality}. ${profanityPrompt}`,
+      name: voiceInit.name,
+      model: "gpt-3.5-turbo",
+    });
+
+    const newVoiceUUID = crypto.randomUUID();
+
+    const fullVoice: Voice = {
+      id: newVoiceUUID,
+      ...voiceInit,
+      assistantId: assistant.id,
+    };
+
+    const introMessage = getIntroduction(voiceInit.name);
+
+    await ai.beta.threads.messages.create(
+      thread.id,
+      {
+        role: "user",
+        content: introMessage,
+      }
+    );
+
+    this.broadcastMessage({
+      message: introMessage,
+      voice: fullVoice,
+    });
+
+    const voices: VoiceMap =
+      (await this.party.storage.get<VoiceMap>("voices")) || {};
+    voices[fullVoice.id] = fullVoice;
+    await this.party.storage.put<VoiceMap>("voices", voices);
   }
 
   async addMessage(message: Message) {
@@ -170,7 +328,7 @@ export default class Server implements Party.Server {
     let context =
       "The following is a list of fictional characters. Here is a list of their uuids, names and descriptions:\n";
     context += Object.values(voices) + "\n\n";
-    context += `Pretend to be one of these characters, and generate a response for ${voice.Name} with description ${voice.Description}:\n`;
+    context += `Pretend to be one of these characters, and generate a response for ${voice.name} with personality ${voice.personality}:\n`;
     context += "Here is my question:\n";
     return context;
   }
