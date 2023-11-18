@@ -1,10 +1,15 @@
 
 <script lang="ts">
+  import Button, { Label } from '@smui/button';
+  import IconButton from '@smui/icon-button';
+  import Textfield from '@smui/textfield';
   import VoiceCreator from "@/components/VoiceCreator.svelte";
   import { Fuck } from '@/utils/buillshit';
 
   const PARTYKIT_HOST = "localhost:1999"
   const BASE_URL = "http://localhost:1999"
+
+  let user = 'TODO:';
 
   const conn = new Fuck({
     host: PARTYKIT_HOST,
@@ -16,11 +21,6 @@
       ];
     }
   });
-
-  import Button, { Label } from '@smui/button';
-  import IconButton from '@smui/icon-button';
-  import Textfield from '@smui/textfield';
-
 
   import {getColorName} from '@/utils/colorName';
 
@@ -48,15 +48,11 @@
 
     const message: Message = {
       text: messageText,
-      user: "User",
+      type: 'USER',
+      user,
     };
 
-    const payload = JSON.stringify({
-      type: "message",
-      message: message
-    });
-
-    // conn.send(payload);
+    conn.sendMessage(messageText, user)
 
     messages = [...messages, message];
     messageText = "";
@@ -68,21 +64,6 @@
     if (e.key === "Enter") {
       handleSendMessage();
     }
-  }
-
-  const handleBullshit = () => {
-    if (voices.length === 0) {
-      return;
-    }
-
-    const randomVoice = voices[Math.floor(Math.random() * voices.length)];
-
-    const message: Message = {
-      text: 'hey',
-      user: randomVoice
-    };
-
-    messages = [...messages, message];
   }
 
   const handleVoiceClear = async () => {
@@ -165,11 +146,6 @@
     }
   };
 
-//   const conn = new PartySocket({
-//   host: PARTYKIT_HOST,
-//   room: spaceName,
-// });
-
   const scrollToBottom = () => {
     const spaceMessages = document.getElementById('space-messages');
     if (spaceMessages) {
@@ -195,8 +171,8 @@
       {#each messages as message}
       <li class="message">
         <p class="message-user"
-          style="color: {getColorName(message.voice.id)};"
->{message.voice.name}:</p>
+          style="color: {getColorName(message.type === 'VOICE' ? message.voice.id : message.user)};"
+>{message.type === 'VOICE' ? message.voice.name : message.user}:</p>
         <p class="message-text">
            {message.text}
         </p>

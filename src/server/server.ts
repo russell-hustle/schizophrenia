@@ -12,11 +12,11 @@ const RUN_STATUS_CHECK_INTERVAL = 1000;
 
 export default class Server implements Party.Server {
   private thread: openai.Beta.Threads.Thread | null;
+  voices: Voice[];
 
   constructor(readonly party: Party.Party) {
     this.thread = null;
-
-    console.log({ party: this.party });
+    this.voices = [];
 
     this.initialize();
   }
@@ -37,6 +37,19 @@ export default class Server implements Party.Server {
     return new openai.OpenAI({
       apiKey: this.openaiKey,
     });
+  }
+
+  // getters/setters for storage
+  async getVoices() {
+    const voices: VoiceMap =
+      (await this.party.storage.get<VoiceMap>("voices")) || {};
+    return voices;
+  }
+
+  async clearVoices() {
+    await this.party.storage.delete("voices");
+    this.party.broadcast("Voices cleared");
+    this.getMessages();
   }
 
   /**
@@ -134,19 +147,6 @@ export default class Server implements Party.Server {
     });
   }
 
-  async broadcastMessage(payload: EventMessageVoice['payload']) {
-    const event: EventMessageVoice = {
-      type: 'MESSAGE_VOICE',
-      payload,
-    };
-
-    const body = JSON.stringify(event);
-
-    console.log({ body });
-
-    this.party.broadcast(body);
-  }
-
   // new websocket connection handler
   async onConnect(conn: Party.Connection, ctx: Party.ConnectionContext) {
     // A websocket just connected!
@@ -239,18 +239,22 @@ export default class Server implements Party.Server {
     return new Response("Method not allowed", { status: 405 });
   }
 
-  // getters/setters for storage
-  async getVoices() {
-    const voices: VoiceMap =
-      (await this.party.storage.get<VoiceMap>("voices")) || {};
-    return voices;
+
+  async broadcastMessage(payload: EventMessageVoice['payload']) {
+    const event: EventMessageVoice = {
+      type: 'MESSAGE_VOICE',
+      payload,
+    };
+
+    const body = JSON.stringify(event);
+
+    console.log({ body });
+
+    this.party.broadcast(body);
   }
 
-  async clearVoices() {
-    await this.party.storage.delete("voices");
-    this.party.broadcast("Voices cleared");
-    this.getMessages();
-  }
+
+
 
   async getMessages() {
     const messages: Message[] =
@@ -259,14 +263,7 @@ export default class Server implements Party.Server {
   }
 
   async addVoice(voiceInit: VoiceInit) {
-    console.info("Adding voice", voiceInit);
-
-    const thread = this.thread;
-
-    if (!thread) {
-      console.warn("Can't add voice, thread is not initialized!");
-      return;
-    }
+    console.info("Creating voice", voiceInit);
 
     const ai = this.openai;
 
@@ -285,7 +282,30 @@ export default class Server implements Party.Server {
       assistantId: assistant.id,
     };
 
-    const introMessage = getIntroduction(voiceInit.name);
+    const voices = await this.getVoices();
+    voices[fullVoice.id] = fullVoice;
+    await this.party.storage.put<VoiceMap>("voices", voices);
+    await this.addVoiceToRoom(fullVoice.id);
+  }
+
+  async addVoiceToRoom(voiceId: string) {
+    const voices = await this.getVoices();
+    const voice = voices[voiceId];
+
+    console.info("Adding voice", voice.name);
+
+    const thread = this.thread;
+
+    if (!thread) {
+      console.warn("Can't add voice, thread is not initialized!");
+      return;
+    }
+
+    this.voices.push(voice);
+
+    const introMessage = getIntroduction(voice.name);
+
+    const ai = this.openai;
 
     await ai.beta.threads.messages.create(
       thread.id,
@@ -297,13 +317,8 @@ export default class Server implements Party.Server {
 
     this.broadcastMessage({
       message: introMessage,
-      voice: fullVoice,
+      voice,
     });
-
-    const voices: VoiceMap =
-      (await this.party.storage.get<VoiceMap>("voices")) || {};
-    voices[fullVoice.id] = fullVoice;
-    await this.party.storage.put<VoiceMap>("voices", voices);
   }
 
   async addMessage(message: Message) {
