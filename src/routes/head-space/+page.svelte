@@ -111,6 +111,29 @@
     voices = [];
   }
 
+  const handleGetAllVoices = async () => {
+    const url = BASE_URL + '/party/voices';
+
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      } else {
+        console.error('HTTP Error:', response.status);
+      }
+    } catch (error) {
+      // Handle any errors
+      console.error('Fetch Error:', error);
+    }
+  }
+
   const handleVoiceAdd = async (voice: Voice) => {
     voices = [...voices, voice.name];
 
