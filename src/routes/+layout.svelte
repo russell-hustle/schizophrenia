@@ -11,7 +11,7 @@
 	</main>
 
 	<footer>
-		<p>Слава Україні</p>
+		<p>Want to <a href='/about'>learn more?</a></p>
 	</footer>
 </div>
 
