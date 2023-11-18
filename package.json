@@ -12,10 +12,10 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write ."
 	},
-  "dependencies": {
-    "openai": "^4.19.0",
-    "partysocket": "0.0.15"
-  },
+	"dependencies": {
+		"openai": "^4.19.0",
+		"partysocket": "0.0.15"
+	},
 	"devDependencies": {
 		"@fontsource/fira-mono": "^4.5.10",
 		"@neoconfetti/svelte": "^1.0.0",
@@ -30,6 +30,7 @@
 		"partykit": "0.0.37",
 		"prettier": "^3.0.0",
 		"prettier-plugin-svelte": "^3.0.0",
+		"sass": "^1.69.5",
 		"svelte": "^4.0.5",
 		"svelte-check": "^3.6.0",
 		"tslib": "^2.4.1",
