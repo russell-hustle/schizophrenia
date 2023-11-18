@@ -8,8 +8,6 @@
     room: "my-room",
   });
 
-  conn.send("hello world");
-
   import VoiceCreator from "@/components/VoiceCreator.svelte";
 
   import {getColorName} from '@/utils/colorName';
@@ -41,6 +39,13 @@
       text: messageText,
       user: "User"
     };
+
+    const payload = JSON.stringify({
+      type: "message",
+      message: message
+    });
+
+    conn.send(payload);
 
     messages = [...messages, message];
     messageText = "";

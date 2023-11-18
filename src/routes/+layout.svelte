@@ -1,5 +1,3 @@
-export const prerender = false;
-
 <script>
 	import Header from './Header.svelte';
 	import './global.scss';
@@ -13,7 +11,7 @@ export const prerender = false;
 	</main>
 
 	<footer>
-		<p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
+		<p>suh</p>
 	</footer>
 </div>
 
