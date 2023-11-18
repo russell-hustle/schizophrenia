@@ -48,15 +48,13 @@
 
     const message: Message = {
       text: messageText,
-      user: "User",
+      sender: "User",
     };
 
     const payload = JSON.stringify({
       type: "message",
       message: message
     });
-
-    conn.send(payload);
 
     messages = [...messages, message];
     messageText = "";
@@ -70,20 +68,6 @@
     }
   }
 
-  const handleBullshit = () => {
-    if (voices.length === 0) {
-      return;
-    }
-
-    const randomVoice = voices[Math.floor(Math.random() * voices.length)];
-
-    const message: Message = {
-      text: 'hey',
-      user: randomVoice
-    };
-
-    messages = [...messages, message];
-  }
 
   const handleVoiceClear = async () => {
 
@@ -195,7 +179,7 @@
       {#each messages as message}
       <li class="message">
         <p class="message-user"
-          style="color: {getColorName(message.voice.id)};"
+          style="color: {getColorName(message.sender?.id || message.voice )};"
 >{message.voice.name}:</p>
         <p class="message-text">
            {message.text}
