@@ -91,6 +91,15 @@ export default class Server implements Party.Server {
       }
     }
 
+    if (request.method === "DELETE") {
+      // clear all voices
+      if (request.url.includes("/voices")) {
+        await this.clearVoices();
+        const res = new Response("Voices cleared", { headers });
+        return res;
+      }
+    }
+
     if (request.method === "GET") {
       // get all messages
       if (request.url.includes("/messages")) {
@@ -115,6 +124,12 @@ export default class Server implements Party.Server {
     const voices: VoicesMap =
       (await this.party.storage.get<VoicesMap>("voices")) || {};
     return voices;
+  }
+
+  async clearVoices() {
+    await this.party.storage.delete("voices");
+    this.party.broadcast("Voices cleared");
+    this.getMessages();
   }
 
   async getMessages() {
