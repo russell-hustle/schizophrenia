@@ -9,8 +9,8 @@ type Voice = VoiceInit & {
 };
 
 type Message = {
-  voice: Voice;
   text: string;
+  user: string;
 };
 
 interface Message {
