@@ -1,6 +1,6 @@
 <script>
   import { page } from "$app/stores";
-  import logo from "$lib/images/schizo.webp";
+  import logo from "$lib/images/schizo.png";
   import github from "$lib/images/github.svg";
 
   const handleToggleTheme = () => {
@@ -84,7 +84,12 @@
   }
 
   #logo {
-    width: 50px;
-    height: 50px;
+    width: 200px;
+    height: 200px;
+    margin-right: -100px;
+  }
+
+  #title {
+    font-size: 60px;
   }
 </style>

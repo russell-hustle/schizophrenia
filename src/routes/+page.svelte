@@ -18,13 +18,11 @@
 			</picture>
 		</span>
 
-		to your new<br />SvelteKit app
+		How many voices are in your head?
+		<br />
+		<br />
+		<br />
 	</h1>
-
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
 	<Counter />
 </section>
 
