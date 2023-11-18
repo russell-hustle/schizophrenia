@@ -1,7 +1,14 @@
 <script lang="ts">
   import PartySocket from "partysocket";
 
-  // declare const PARTYKIT_HOST: string;
+  const PARTYKIT_HOST = "localhost:1999"
+
+  const conn = new PartySocket({
+    host: PARTYKIT_HOST,
+    room: "my-room",
+  });
+
+  conn.send("hello world");
 
   import VoiceCreator from "@/components/VoiceCreator.svelte";
 

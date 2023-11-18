@@ -1,3 +1,5 @@
+export const prerender = false;
+
 <script>
 	import Header from './Header.svelte';
 	import './global.scss';
