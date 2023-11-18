@@ -122,8 +122,13 @@ export default class Server implements Party.Server {
 
     this.logJson("new message", newMessage.content);
 
+    const response = newMessage.content[0];
+    if (response.type !== 'text') {
+      return;
+    }
+
     this.broadcastMessage({
-      message: newMessage.content.join(''),
+      message: response.text.value,
       voice: voice,
     });
   }
@@ -135,6 +140,8 @@ export default class Server implements Party.Server {
     };
 
     const body = JSON.stringify(event);
+
+    console.log({ body });
 
     this.party.broadcast(body);
   }

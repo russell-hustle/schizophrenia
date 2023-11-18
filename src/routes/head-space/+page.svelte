@@ -1,15 +1,21 @@
+
 <script lang="ts">
-  import PartySocket from "partysocket";
+  import VoiceCreator from "@/components/VoiceCreator.svelte";
+  import { Fuck } from '@/utils/buillshit';
 
   const PARTYKIT_HOST = "localhost:1999"
   const BASE_URL = "http://localhost:1999"
 
-  const conn = new PartySocket({
+  const conn = new Fuck({
     host: PARTYKIT_HOST,
     room: "my-room",
+    onMessage: msg => {
+      messages = [
+        ...messages,
+        msg
+      ];
+    }
   });
-
-  import VoiceCreator from "@/components/VoiceCreator.svelte";
 
   import {getColorName} from '@/utils/colorName';
 
@@ -138,8 +144,8 @@
       {#each messages as message}
       <li class="message">
         <p class="message-user"
-          style="color: {getColorName(message.user)};"
->{message.user}:</p>
+          style="color: {getColorName(message.voice.id)};"
+>{message.voice.name}:</p>
         <p class="message-text">
            {message.text}
         </p>
