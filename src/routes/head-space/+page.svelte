@@ -13,7 +13,7 @@
 
   import {getColorName} from '@/utils/colorName';
 
-  let spaceName = "unknown";
+  let spaceName = "";
   let creationOpen = false;
 
   let messageText = "";
