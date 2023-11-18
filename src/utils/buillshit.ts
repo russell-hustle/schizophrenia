@@ -23,6 +23,7 @@ export class Fuck {
           case 'MESSAGE_VOICE':
             onMessage({
               voice: event.payload.voice,
+              type: 'VOICE',
               text: event.payload.message
             });
             break;
@@ -36,12 +37,12 @@ export class Fuck {
     };
   }
 
-  sendMessage(message: string) {
+  sendMessage(message: string, user: string) {
     const event: EventMessageUser = {
       type: 'MESSAGE_USER',
       payload: {
         message,
-        name: 'TODO'
+        name: user
       }
     };
 

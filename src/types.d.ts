@@ -10,8 +10,16 @@ type Voice = VoiceInit & {
 
 type Message = {
   text: string;
-  voice: Voice;
-};
+} & (
+    | {
+      type: 'VOICE';
+      voice: Voice;
+    }
+    | {
+      type: 'USER';
+      user: string;
+    }
+  );
 
 interface VoiceMap {
   [uuid: string]: Voice;
