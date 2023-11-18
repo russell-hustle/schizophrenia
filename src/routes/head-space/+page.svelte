@@ -1,12 +1,20 @@
+
 <script lang="ts">
-  import PartySocket from "partysocket";
+  import VoiceCreator from "@/components/VoiceCreator.svelte";
+  import { Fuck } from '@/utils/buillshit';
 
   const PARTYKIT_HOST = "localhost:1999"
   const BASE_URL = "http://localhost:1999"
 
-  const conn = new PartySocket({
+  const conn = new Fuck({
     host: PARTYKIT_HOST,
     room: "my-room",
+    onMessage: msg => {
+      messages = [
+        ...messages,
+        msg
+      ];
+    }
   });
 
   import Button, { Label } from '@smui/button';
@@ -42,7 +50,7 @@
 
     const message: Message = {
       text: messageText,
-      user: "User"
+      user: "User",
     };
 
     const payload = JSON.stringify({
@@ -77,6 +85,36 @@
     };
 
     messages = [...messages, message];
+  }
+  
+  const handleVoiceClear = async () => {
+
+    const url = BASE_URL + '/party/voices';
+
+    try {
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      } else {
+        console.error('HTTP Error:', response.status);
+      }
+    } catch (error) {
+      // Handle any errors
+      console.error('Fetch Error:', error);
+    }
+
+    conn.send(JSON.stringify({
+      type: "clear"
+    }));
+
+    voices = [];
   }
 
   const handleVoiceAdd = async (voice: Voice) => {
@@ -142,8 +180,8 @@
       {#each messages as message}
       <li class="message">
         <p class="message-user"
-          style="color: {getColorName(message.user)};"
->{message.user}:</p>
+          style="color: {getColorName(message.voice.id)};"
+>{message.voice.name}:</p>
         <p class="message-text">
            {message.text}
         </p>
@@ -157,6 +195,7 @@
     </Textfield>
     <div id="space-input-messages">
       <Button on:click={handleSendMessage} variant="raised" style="height:100%"> <Label>Send</Label> </Button>
+      <Button on:click={handleVoiceClear} variant="raised" style="height:100%"> <Label>Clear Voices</Label> </Button>
       <IconButton class="material-icons" on:click={handleOpenCreation} style="height:100%"
     >add</IconButton
   >
