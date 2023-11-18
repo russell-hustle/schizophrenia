@@ -77,6 +77,7 @@ export default class Server implements Party.Server {
     // Let's choose a random voice
     const voiceMap = await this.getVoices();
     if (!Object.keys(voiceMap).length) {
+      console.warn("Can't tick, no voices!");
       return;
     }
 
@@ -155,9 +156,6 @@ export default class Server implements Party.Server {
         room: ${this.party.id}
         url: ${new URL(ctx.request.url).pathname}`
     );
-
-    // let's send a message to the connection
-    conn.send("hello from server, welcome to the party!");
   }
 
   // websocket handler
@@ -181,9 +179,6 @@ export default class Server implements Party.Server {
 
   // http request handler
   async onRequest(request: Party.Request) {
-
-
-
     const headers = new Headers({
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
@@ -220,7 +215,7 @@ export default class Server implements Party.Server {
       if (request.url.includes("/voices")) {
         await this.clearVoices();
         let message = "Voices cleared";
-        const res = new Response( JSON.stringify(message), { headers });
+        const res = new Response(JSON.stringify(message), { headers });
         return res;
       }
     }

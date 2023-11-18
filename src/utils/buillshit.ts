@@ -45,10 +45,6 @@ export class Fuck {
     };
   }
 
-  handleMessage() {
-
-  }
-
   sendMessage(message: EventMessageUser) {
 
   }
