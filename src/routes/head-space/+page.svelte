@@ -213,8 +213,6 @@ button.icon {
   overflow: auto;
   flex: 1;
   padding: 16px;
-  border: 1px solid black;
-  border-radius: 8px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -227,7 +225,7 @@ button.icon {
     flex: 1;
     overflow: auto;
     padding: 16px;
-    border: 1px solid black;
+    border: 1px solid gray;
     border-radius: 8px;
 
     ul {

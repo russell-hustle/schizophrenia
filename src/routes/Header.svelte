@@ -69,6 +69,7 @@ darkMode = "light mode";
   #logo {
     height:auto;
     width: 15vw;
+    padding-right:-8vw;
   }
 
   #title {

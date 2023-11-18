@@ -48,7 +48,7 @@
   </div>
 
   <div class="voice-creator">
-    <Textfield variant="outlined" bind:value={personality} style="width:100%" label="Personality" type="text"></Textfield>
+    <Textfield textarea variant="outlined" bind:value={personality} style="width:100%" label="Personality" type="text"></Textfield>
     </div>
 {/if}
 
