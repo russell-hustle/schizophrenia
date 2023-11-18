@@ -2,6 +2,9 @@
   export let open: boolean;
   export let onClose: () => void;
   export let onVoiceAdd: (voice: Voice) => void;
+  import Button, { Label } from '@smui/button';
+  import Textfield from '@smui/textfield';
+  import IconButton from '@smui/icon-button';
 
   import { onMount, onDestroy } from 'svelte';
 
@@ -36,28 +39,23 @@
 </script>
 
 {#if open}
+<br/>
+<br/>
   <div class="voice-creator">
-    <button on:click={handleClose}>Close</button>
-    <h2>Create a voice</h2>
-    <input bind:value={name} placeholder="Name" />
-    <input bind:value={personality} placeholder="Personality" />
-    <button on:click={handleCreate}>Add</button>
+    <Textfield variant="outlined" bind:value={name} style="width:100%" label="Name" type="text"></Textfield>
+    <Button on:click={handleCreate} variant="raised" style="height:100%; margin-left:10px"> <Label>Create</Label> </Button>
+      <IconButton class="material-icons" on:click={handleClose} style="height:100%">remove</IconButton >
   </div>
+
+  <div class="voice-creator">
+    <Textfield variant="outlined" bind:value={personality} style="width:100%" label="Personality" type="text"></Textfield>
+    </div>
 {/if}
 
 <style>
   .voice-creator {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: white;
-    z-index: 100;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    flex-direction: row;
   }
 
 </style>
