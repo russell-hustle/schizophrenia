@@ -24,8 +24,7 @@
 
   let messageText = "";
 
-  let messages: Message[] = [
-  ];
+  let messages: Message[] = [];
 
   let voices: string[] = [];
 
@@ -80,7 +79,7 @@
 
     messages = [...messages, message];
   }
-  
+
   const handleVoiceClear = async () => {
 
     const url = BASE_URL + '/party/voices';
