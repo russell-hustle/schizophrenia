@@ -1,7 +1,7 @@
 import type * as Party from "partykit/server";
 import type { Message, Voice, NewVoiceRequest, VoicesMap } from "./types";
 import { callOpenAI } from "./chat";
-import crypto from "crypto";
+import crypto from "node:crypto";
 
 export default class Server implements Party.Server {
   constructor(readonly party: Party.Party) { }
