@@ -13,13 +13,6 @@ type Message = {
   voice: Voice;
 };
 
-interface Message {
-  VoiceUUID: string;
-  Content: string;
-  Time: Date;
-  CreatedBy: string;
-}
-
 interface VoiceMap {
   [uuid: string]: Voice;
 }
