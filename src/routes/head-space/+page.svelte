@@ -50,6 +50,8 @@
 
     messages = [...messages, message];
     messageText = "";
+
+    scrollToBottom();
   }
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -110,6 +112,14 @@
 //   host: PARTYKIT_HOST,
 //   room: spaceName,
 // });
+
+  const scrollToBottom = () => {
+    const spaceMessages = document.getElementById('space-messages');
+    if (spaceMessages) {
+      scrollTop = spaceMessages.scrollHeight
+    }
+
+  }
 
 </script>
 
@@ -199,7 +209,7 @@ button.icon {
         gap: 8px;
         padding: 8px;
         border: 1px solid black;
-        border-radius: 8px;
+        border-radius: 18px 18px 18px 0;
 
         .message-user {
           font-weight: bold;
