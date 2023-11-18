@@ -36,7 +36,32 @@ export class Fuck {
     };
   }
 
-  sendMessage(message: EventMessageUser) {
+  sendMessage(message: string) {
+    const event: EventMessageUser = {
+      type: 'MESSAGE_USER',
+      payload: {
+        message,
+        name: 'TODO'
+      }
+    };
+
+    const payload = JSON.stringify(event);
+
+    this.conn.send(payload);
+  }
+
+  voicesAdd(voice: VoiceInit) {
+
+  }
+
+  voicesRemove(id: string) {
+
+  }
+
+  /**
+   * Clear voices from room
+   */
+  voicesClear() {
 
   }
 }
