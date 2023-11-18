@@ -8,7 +8,7 @@
 
   const conn = new Fuck({
     host: PARTYKIT_HOST,
-    room: "my-room",
+    room: "voices",
     onMessage: msg => {
       messages = [
         ...messages,
@@ -104,10 +104,6 @@
       console.error('Fetch Error:', error);
     }
 
-    conn.send(JSON.stringify({
-      type: "clear"
-    }));
-
     voices = [];
   }
 
@@ -140,8 +136,6 @@
       // Handle any errors
       console.error('Fetch Error:', error);
     }
-
-    conn.send(payload);
   };
 
 //   const conn = new PartySocket({
