@@ -18,7 +18,7 @@ export interface VoicesMap {
 
 export interface NewVoiceRequest {
   name: string;
-  description: string;
+  personality: string;
 }
 
 export interface NewMessageRequest {

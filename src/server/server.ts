@@ -54,26 +54,39 @@ export default class Server implements Party.Server {
 
   // http request handler
   async onRequest(request: Party.Request) {
+
+    
+
+    const headers = new Headers({
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    });
+
+    if (request.method === "OPTIONS") {
+      return new Response(null, { headers, status: 204 });
+    }
+
     if (request.method === "POST") {
       // add a voice
       if (request.url.includes("/voice")) {
         const body: NewVoiceRequest = await request.json();
         if (!body?.name) {
-          return new Response("Missing name", { status: 400 });
+          return new Response("Missing name", { headers, status: 400 });
         }
-        if (!body?.description) {
-          return new Response("Missing description", { status: 400 });
+        if (!body?.personality) {
+          return new Response("Missing description", { headers, status: 400 });
         }
         const newVoiceUUID = crypto.randomUUID();
         const newVoice: Voice = {
           UUID: newVoiceUUID,
           Name: body.name,
-          Description: body.description,
+          Description: body.personality,
           Messages: [],
         };
         await this.addVoice(newVoice);
-        const res = new Response(JSON.stringify(newVoice));
-        res.headers.set("Content-Type", "application/json");
+        const res = new Response(JSON.stringify(newVoice), { headers });
         return res;
       }
     }
@@ -82,16 +95,14 @@ export default class Server implements Party.Server {
       // get all messages
       if (request.url.includes("/messages")) {
         const messages = await this.getMessages();
-        const res = new Response(JSON.stringify(messages));
-        res.headers.set("Content-Type", "application/json");
+        const res = new Response(JSON.stringify(messages), { headers });
         return res;
       }
 
       // get all voices
       if (request.url.includes("/voices")) {
         const voices = await this.getVoices();
-        const res = new Response(JSON.stringify(voices));
-        res.headers.set("Content-Type", "application/json");
+        const res = new Response(JSON.stringify(voices), { headers });
         return res;
       }
     }

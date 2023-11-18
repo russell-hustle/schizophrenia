@@ -2,6 +2,7 @@
   import PartySocket from "partysocket";
 
   const PARTYKIT_HOST = "localhost:1999"
+  const BASE_URL = "http://localhost:1999"
 
   const conn = new PartySocket({
     host: PARTYKIT_HOST,
@@ -74,9 +75,38 @@
     messages = [...messages, message];
   }
 
-  const handleVoiceAdd = (voice: Voice) => {
+  const handleVoiceAdd = async (voice: Voice) => {
     voices = [...voices, voice.name];
-  }
+
+    const payload = JSON.stringify({
+      "name": voice.name,
+      "personality": voice.personality
+    });
+
+    const url = BASE_URL + '/party/voices';
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: payload
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      } else {
+        console.error('HTTP Error:', response.status);
+      }
+    } catch (error) {
+      // Handle any errors
+      console.error('Fetch Error:', error);
+    }
+
+    conn.send(payload);
+  };
 
 //   const conn = new PartySocket({
 //   host: PARTYKIT_HOST,
