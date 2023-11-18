@@ -8,7 +8,7 @@
 
   const conn = new Fuck({
     host: PARTYKIT_HOST,
-    room: "my-room",
+    room: "voices",
     onMessage: msg => {
       messages = [
         ...messages,
@@ -30,8 +30,7 @@
 
   let messageText = "";
 
-  let messages: Message[] = [
-  ];
+  let messages: Message[] = [];
 
   let voices: string[] = [];
 
@@ -86,7 +85,7 @@
 
     messages = [...messages, message];
   }
-  
+
   const handleVoiceClear = async () => {
 
     const url = BASE_URL + '/party/voices';
@@ -109,10 +108,6 @@
       // Handle any errors
       console.error('Fetch Error:', error);
     }
-
-    conn.send(JSON.stringify({
-      type: "clear"
-    }));
 
     voices = [];
   }
@@ -146,8 +141,6 @@
       // Handle any errors
       console.error('Fetch Error:', error);
     }
-
-    conn.send(payload);
   };
 
 //   const conn = new PartySocket({

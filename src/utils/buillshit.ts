@@ -1,15 +1,5 @@
 import PartySocket from "partysocket";
 
-const PARTYKIT_HOST = "localhost:1999";
-const BASE_URL = "http://localhost:1999";
-
-const conn = new PartySocket({
-  host: PARTYKIT_HOST,
-  room: "my-room",
-});
-
-conn.addEventListener;
-
 type Props = {
   host: string;
   room: string;
@@ -25,9 +15,10 @@ export class Fuck {
       room,
     });
 
-    conn.onmessage = e => {
+    this.conn.onmessage = e => {
       try {
         const event = JSON.parse(e.data) as SocketEvent;
+        console.log(event);
         switch (event.type) {
           case 'MESSAGE_VOICE':
             onMessage({
