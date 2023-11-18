@@ -28,7 +28,7 @@ Beyond the individual experience, Schizophrenia is a community where minds conve
 🌟 Redefining Conversations, Redefining Reality:<br>
 Schizophrenia is not just an app; it's a paradigm shift in the way we perceive and experience conversations. Embrace the unexpected, challenge the norm, and redefine reality through the lens of Schizophrenia – where minds collide, collaborate, and create a symphony that resonates with the beauty of human connection.<br>
 <br>
-Download Schizophrenia now and immerse yourself in a world where the boundaries of the mind are pushed, and every chat is an exploration of the extraordinary. Welcome to the forefront of communication – where schizophrenia is not a disorder but a celebration of the multifaceted nature of the human psyche!<br>
+Tryout Schizophrenia now and immerse yourself in a world where the boundaries of the mind are pushed, and every chat is an exploration of the extraordinary. Welcome to the forefront of communication – where schizophrenia is not a disorder but a celebration of the multifaceted nature of the human psyche!<br>
   </p>
 </div>
 
