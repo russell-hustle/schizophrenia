@@ -60,7 +60,7 @@ export default class Server implements Party.Server {
     const headers = new Headers({
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS, DELETE",
       "Access-Control-Allow-Headers": "Content-Type",
     });
 
@@ -95,7 +95,8 @@ export default class Server implements Party.Server {
       // clear all voices
       if (request.url.includes("/voices")) {
         await this.clearVoices();
-        const res = new Response("Voices cleared", { headers });
+        let message = "Voices cleared";
+        const res = new Response( JSON.stringify(message), { headers });
         return res;
       }
     }
