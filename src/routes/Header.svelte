@@ -1,16 +1,20 @@
 <script>
+  import Button, { Label } from '@smui/button';
   import { page } from "$app/stores";
   import logo from "$lib/images/schizo.png";
   import github from "$lib/images/github.svg";
 
+  let darkMode = "dark mode";
   const handleToggleTheme = () => {
     const root = document.documentElement;
     const isDark = root.classList.contains("dark");
 
     if (isDark) {
+      darkMode = "dark mode";
       root.classList.remove("dark");
       localStorage.theme = "light";
     } else {
+darkMode = "light mode";
       root.classList.add("dark");
       localStorage.theme = "dark";
     }
@@ -24,32 +28,11 @@
 
   <nav>
       <h2 id="title">SCHIZOPHRENIA</h2>
-      <ul>
-        <li aria-current={$page.url.pathname === "/" ? "page" : undefined}>
-          <a href="/">Home</a>
-        </li>
-        <li aria-current={$page.url.pathname === "/about" ? "page" : undefined}>
-          <a href="/about">About</a>
-        </li>
-        <li
-          aria-current={$page.url.pathname.startsWith("/sverdle")
-            ? "page"
-            : undefined}
-        >
-          <a href="/sverdle">Sverdle</a>
-        </li>
-        <li
-          aria-current={$page.url.pathname.startsWith("/head-space")
-            ? "page"
-            : undefined}
-        >
-          <a href="/head-space">Your head</a>
-        </li>
-      </ul>
+      
   </nav>
 
   <div class="toolbar">
-    <button on:click={handleToggleTheme} >Gang shit toggle</button>
+    <Button on:click={handleToggleTheme} touch variant="raised" ><Label>{darkMode}</Label></Button>
     <a href="https://github.com/russell-hustle/schizophrenia">
       <img src={github} alt="GitHub" />
     </a>
@@ -84,9 +67,8 @@
   }
 
   #logo {
-    width: 200px;
-    height: 200px;
-    margin-right: -100px;
+    height:auto;
+    width: 15vw;
   }
 
   #title {

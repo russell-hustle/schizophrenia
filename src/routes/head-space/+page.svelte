@@ -9,6 +9,10 @@
     room: "my-room",
   });
 
+  import Button, { Label } from '@smui/button';
+  import IconButton from '@smui/icon-button';
+  import Textfield from '@smui/textfield';
+
   import VoiceCreator from "@/components/VoiceCreator.svelte";
 
   import {getColorName} from '@/utils/colorName';
@@ -116,7 +120,7 @@
   const scrollToBottom = () => {
     const spaceMessages = document.getElementById('space-messages');
     if (spaceMessages) {
-      spaceMessages.scrollTop = spaceMessages.scrollHeight;
+      spaceMessages.scrollTop = spaceMessages.scrollHeight
     }
 
   }
@@ -149,11 +153,13 @@
   </div>
 
   <div id="space-input">
-    <input bind:value={messageText} on:keydown={handleKeyDown}  placeholder="Type a message..." type="text" />
+<Textfield variant="outlined" style="width: 100%;" bind:value={messageText} on:keydown={handleKeyDown} label="Type a message..." type="text">
+    </Textfield>
     <div id="space-input-messages">
-      <button class="sendButton" on:click={handleSendMessage}>Send</button>
-      <button class="icon" on:click={handleOpenCreation}>+</button>
-      <button class="icon" on:click={handleBullshit}>O</button>
+      <Button on:click={handleSendMessage} variant="raised" style="height:100%"> <Label>Send</Label> </Button>
+      <IconButton class="material-icons" on:click={handleOpenCreation} style="height:100%"
+    >add</IconButton
+  >
     </div>
   </div>
 
@@ -233,6 +239,9 @@ button.icon {
       display: flex;
       gap: 8px;
     }
+  }
+  .input-field-yo {
+    width: 800px;
   }
 }
 
