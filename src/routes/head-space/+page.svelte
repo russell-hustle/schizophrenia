@@ -80,6 +80,36 @@
 
     messages = [...messages, message];
   }
+  
+  const handleVoiceClear = async () => {
+
+    const url = BASE_URL + '/party/voices';
+
+    try {
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      } else {
+        console.error('HTTP Error:', response.status);
+      }
+    } catch (error) {
+      // Handle any errors
+      console.error('Fetch Error:', error);
+    }
+
+    conn.send(JSON.stringify({
+      type: "clear"
+    }));
+
+    voices = [];
+  }
 
   const handleVoiceAdd = async (voice: Voice) => {
     voices = [...voices, voice.name];
@@ -157,7 +187,8 @@
   <div id="space-input">
     <input bind:value={messageText} on:keydown={handleKeyDown}  placeholder="Type a message..." type="text" />
     <div id="space-input-messages">
-      <button class="sendButton" on:click={handleSendMessage}>Send</button>
+      <button on:click={handleVoiceClear}>Clear Voices</button>
+      <button on:click={handleSendMessage}>Send</button>
       <button class="icon" on:click={handleOpenCreation}>+</button>
       <button class="icon" on:click={handleBullshit}>O</button>
     </div>

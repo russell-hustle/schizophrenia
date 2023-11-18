@@ -187,7 +187,7 @@ export default class Server implements Party.Server {
     const headers = new Headers({
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS, DELETE",
       "Access-Control-Allow-Headers": "Content-Type",
     });
 
@@ -211,6 +211,16 @@ export default class Server implements Party.Server {
         };
         await this.addVoice(newVoice);
         const res = new Response(JSON.stringify(newVoice), { headers });
+        return res;
+      }
+    }
+
+    if (request.method === "DELETE") {
+      // clear all voices
+      if (request.url.includes("/voices")) {
+        await this.clearVoices();
+        let message = "Voices cleared";
+        const res = new Response( JSON.stringify(message), { headers });
         return res;
       }
     }
@@ -239,6 +249,12 @@ export default class Server implements Party.Server {
     const voices: VoiceMap =
       (await this.party.storage.get<VoiceMap>("voices")) || {};
     return voices;
+  }
+
+  async clearVoices() {
+    await this.party.storage.delete("voices");
+    this.party.broadcast("Voices cleared");
+    this.getMessages();
   }
 
   async getMessages() {
