@@ -86,7 +86,7 @@
   const scrollToBottom = () => {
     const spaceMessages = document.getElementById('space-messages');
     if (spaceMessages) {
-      scrollTop = spaceMessages.scrollHeight
+      spaceMessages.scrollTop = spaceMessages.scrollHeight;
     }
 
   }
@@ -105,12 +105,6 @@
 
   <div id="space-messages">
     <ul>
-      {#if messages.length === 0}
-      <li class="message" id="placeholder">
-        <p class="message-text">
-          No messages yet
-        </p>
-      {/if}
       {#each messages as message}
       <li class="message">
         <p class="message-user"
@@ -127,7 +121,7 @@
   <div id="space-input">
     <input bind:value={messageText} on:keydown={handleKeyDown}  placeholder="Type a message..." type="text" />
     <div id="space-input-messages">
-      <button on:click={handleSendMessage}>Send</button>
+      <button class="sendButton" on:click={handleSendMessage}>Send</button>
       <button class="icon" on:click={handleOpenCreation}>+</button>
       <button class="icon" on:click={handleBullshit}>O</button>
     </div>
@@ -143,6 +137,11 @@ button.icon {
   width: 30px;
   height: 30px;
 }
+
+.sendButton {
+  padding: 10px;
+}
+
 
 #space {
   overflow: auto;
@@ -179,7 +178,7 @@ button.icon {
         gap: 8px;
         padding: 8px;
         border: 1px solid black;
-        border-radius: 18px 18px 18px 0;
+        border-radius: 14px 14px 14px 0;
 
         .message-user {
           font-weight: bold;
