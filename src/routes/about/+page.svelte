@@ -30,6 +30,6 @@ Frankfurter alcatra landjaeger brisket venison short loin ball tip pork meatball
   }
 
   p {
-    font-size: 200px;
+    font-size: 2px;
   }
 </style>

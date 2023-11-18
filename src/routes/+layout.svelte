@@ -11,7 +11,7 @@
 	</main>
 
 	<footer>
-		<p>suh</p>
+		<p>Слава Україні</p>
 	</footer>
 </div>
 
