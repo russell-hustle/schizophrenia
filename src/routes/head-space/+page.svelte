@@ -37,7 +37,7 @@
 
     const message: Message = {
       text: messageText,
-      user: "User"
+      user: "User",
     };
 
     const payload = JSON.stringify({
