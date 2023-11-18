@@ -21,7 +21,6 @@
   import IconButton from '@smui/icon-button';
   import Textfield from '@smui/textfield';
 
-  import VoiceCreator from "@/components/VoiceCreator.svelte";
 
   import {getColorName} from '@/utils/colorName';
 
